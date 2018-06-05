@@ -10,6 +10,8 @@ Rails.application.routes.draw do
         end    
     end
   end
+end
+end
   
   get 'session', to: 'sessions#new'
   post 'session', to: 'sessions#create'
@@ -17,5 +19,3 @@ Rails.application.routes.draw do
   
   root 'questions#index'
 end
-
-    resource :sessions, only: :create
