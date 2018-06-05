@@ -54,11 +54,16 @@ class Api::V1::QuestionsController < ApplicationController
   # DELETE /questions/1
   # DELETE /questions/1.json
   def destroy
-    @question.destroy
+      @question = question.find(params[:id])
+      if current_user.id == @question.user_id
+          @question.destroy
+          redirect_to questions_path
+      else
+          redirect_to @post, alert: 'Only post creator can delete.'
+      end
     respond_to do |format|
       format.html { redirect_to questions_url, notice: 'Question was successfully destroyed.' }
       format.json { head :no_content }
-    end
   end
 
   private
@@ -69,6 +74,6 @@ class Api::V1::QuestionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def question_params
-      params.require(:question).permit(:title, :content)
+      params.require(:question).permit(:title, :content, :user_id)
     end
 end

@@ -28,9 +28,11 @@ class Api::V1::UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
+        redirect_to session_path, notice: "Your username was created successfully. Please login."
         format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
+        redirect_to new_api_v1_user_path, alert: "Please enter a username and password."
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
