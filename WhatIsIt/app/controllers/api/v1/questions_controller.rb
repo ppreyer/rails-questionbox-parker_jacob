@@ -1,5 +1,6 @@
 class Api::V1::QuestionsController < ApplicationController
   before_action :set_question, only: [:show, :edit, :update, :destroy]
+  skip_before_action :verify_authentication
 
   # GET /questions
   # GET /questions.json
@@ -64,6 +65,7 @@ class Api::V1::QuestionsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to questions_url, notice: 'Question was successfully destroyed.' }
       format.json { head :no_content }
+    end
   end
 
   private

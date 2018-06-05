@@ -19,8 +19,8 @@
         </div>
       <% else %>
         <div class="text-right my-4">
-          <%= link_to "Log in", new_login_path, class:'btn text-light btn-sm', style:'background-color: #137547;' %>  |  
-          <%= link_to "Register New User", new_user_path, class:'btn text-light btn-sm', style:'background-color: #137547;' %>
+          <%= link_to "Log in", new_api_v1_user_path, class:'btn text-light btn-sm', style:'background-color: #137547;' %>  |  
+          <%= link_to "Register New User", new_api_v1_user_path, class:'btn text-light btn-sm', style:'background-color: #137547;' %>
         </div>
       <% end %>
       <% flash.each do |name, msg| -%>
