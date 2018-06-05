@@ -1,5 +1,16 @@
 <h1>New User</h1>
 
-<%= render 'form', user: @user %>
+<%= form_for :user, url: api_v1_users_path do |f| %>
+  <div class='form-group col-md-4'>
+    <%= f.label :username %>
+    <%= f.text_field :username, class: 'form-control' %>
+  </div>
 
-<%= link_to 'Back', users_path %>
+  <div class='form-group col-md-4'>
+    <%= f.label :password %>
+    <%= f.password_field :password, class: 'form-control' %>
+  </div>
+
+    <%= f.submit 'Sign Up', class: 'btn btn-success' %>
+
+<% end %>
