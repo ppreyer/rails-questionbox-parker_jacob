@@ -7,23 +7,34 @@ class Api::V1::QuestionsController < ApplicationController
   end
 
   def show
+    @question = Question.find(params[:id])
   end
 
   def new
+    if current_user
     @question = Question.new
+    else
+      redirect_to new_api_v1_session_path, alert: 'You must login to create a question'
+    end
   end
 
   def edit
+    if current_user
+      if current_user.id == @question.user_id
+          @question = Question.find(params[:id])
+      else
+          redirect_to api_v1_question_path, alert: 'Only question creator can edit.'
+      end
+    else
+      redirect_to new_api_v1_session_path, alert: "Please log in first."
+    end
   end
 
   def create
     @question = Question.new(question_params)
-
     respond_to do |format|
-      if @question.save
-        redirect_to api_v1_question_path, alert: 'Question was successfully created.'
-        
-        format.html { redirect_to @question, notice: 'Question was successfully created.' }
+      if @question.save        
+        format.html { redirect_to api_v1_questions_path, notice: 'Question was successfully created.' }
         format.json { render :show, status: :created, location: @question }
       else
         format.html { render :new }
@@ -33,9 +44,10 @@ class Api::V1::QuestionsController < ApplicationController
   end
 
   def update
+    @question = Question.find(params[:id])
     respond_to do |format|
       if @question.update(question_params)
-        format.html { redirect_to @question, notice: 'Question was successfully updated.' }
+        format.html { redirect_to api_v1_question_path, notice: 'Question was successfully updated.' }
         format.json { render :show, status: :ok, location: @question }
       else
         format.html { render :edit }
@@ -45,17 +57,20 @@ class Api::V1::QuestionsController < ApplicationController
   end
 
   def destroy
-      @question = question.find(params[:id])
-      if current_user.id == @question.user_id
+      @question = Question.find(params[:id])
+      if current_user
+        if current_user.id == @question.user_id
           @question.destroy
-          redirect_to questions_path
+            respond_to do |format|
+            format.html { redirect_to api_v1_questions_path, alert: 'Question was successfully destroyed.' }
+            format.json { head :no_content }
+          end
+        else
+            redirect_to @question, alert: 'Only post creator can delete.'
+        end
       else
-          redirect_to @question, alert: 'Only post creator can delete.'
+        redirect_to new_api_v1_session_path, alert: 'Please log in first'
       end
-    respond_to do |format|
-      format.html { redirect_to questions_url, notice: 'Question was successfully destroyed.' }
-      format.json { head :no_content }
-    end
   end
 
   private

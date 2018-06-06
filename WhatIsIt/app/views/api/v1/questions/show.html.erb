@@ -1,4 +1,7 @@
+<h1>Question</h1>
 <p id="notice"><%= notice %></p>
+
+<%= "Posted by #{@question.user}"%>
 
 <p>
   <strong>Title:</strong>
@@ -13,9 +16,27 @@
 <% if @question.image.attached? %>
 <p>
   <strong>Image:</strong>
-    <%= image_tag @recipe.image %>
+    <%= image_tag @question.image %>
 </p>
 <% end %>
 
-<%= link_to 'Edit', edit_question_path(@question) %> |
-<%= link_to 'Back', questions_path %>
+<h2 class='mt-5'>Answers</h2>
+<%= link_to 'Add a answer', new_api_v1_answer_path(question_id: @question.id), class:'btn text-light', style:'background-color: #137547;' %>
+
+<% @question.answers.each do |answer|%>
+    <div class='p-2 my-2', style='background-color: rgba(194,239,179,0.4);'>
+
+        <p class="font-weight-light"><%= answer.content%></p>
+        <%= "Answered by #{answer.user_id}"%>
+
+        <% if current_user.id == answer.user_id %>
+        <%= link_to 'Edit answer', edit_api_v1_answer_path(question_id: @question.id), class:'btn text-light btn-sm', style:'background-color: #137547;'  %> |
+        <%= link_to 'Delete answer', api_v1_answer_path(answer),
+               method: :delete, class:'btn text-light btn-sm', style:'background-color: #137547;' %>
+        <% end %>
+</p>
+    </div>
+<% end %>
+
+<%= link_to 'Edit', edit_api_v1_question_path %> |
+<%= link_to 'Back', api_v1_questions_path %>

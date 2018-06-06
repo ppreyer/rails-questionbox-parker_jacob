@@ -14,13 +14,18 @@
   <tbody>
     <% @questions.each do |question| %>
       <tr>
+      <%= "Posted by #{question.user}"%>
         <td><%= question.title %></td>
         <td><%= question.content %></td>
-        <td><%= link_to 'Show', question %></td>
-        <td><%= link_to 'Edit', edit_question_path(question) %></td>
-        <td><%= link_to 'Destroy', question, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', api_v1_question_path(question)%></td>
+        <% if current_user %>
+        <td><%= link_to 'Edit', edit_api_v1_question_path(question) %></td>
+        <td><%= link_to 'Destroy', api_v1_question_path(question), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+        <%= pluralize(question.answers.count, "Answer") %>
       </tr>
     <% end %>
+    
   </tbody>
 </table>
 

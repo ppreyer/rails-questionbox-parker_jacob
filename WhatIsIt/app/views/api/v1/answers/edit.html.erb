@@ -1,0 +1,13 @@
+<%= form_with scope: :answer, url: edit_api_v1_answers_path, method: :put, do |form| %>
+    <%= form.hidden_field :user_id, value: current_user.id %>
+    <%= form.hidden_field :question_id, value: @question.id %>
+    <div class="form-group">
+        <%= form.label :content %><br>
+        <%= form.content_area :content, class:'form-control' %>
+    </div>
+
+  <p>
+    <%= form.submit class:'btn text-light', style:'background-color: #137547;' %>
+  </p>
+ 
+<% end %>

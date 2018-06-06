@@ -15,6 +15,6 @@ class Api::V1::SessionsController < ApplicationController
 
     def destroy
       session[:user_id] = nil
-      redirect_to new_login_path, notice: "You have successfully logged out!"
+      redirect_to api_v1_questions_path, notice: "You have successfully logged out!"
     end
 end
