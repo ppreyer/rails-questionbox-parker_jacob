@@ -22,7 +22,11 @@ class ApplicationController < ActionController::Base
     end
 
     def current_user    
-      @user ||= User.find_by(api_token: bearer_token)
-      return @user
+      # if the session is not empty...
+      if session[:user_id]
+        # if I have the variable @user use that if not set it to this...
+        @user ||= User.find(session[:user_id])
+        return @user
+      end
     end
 end
