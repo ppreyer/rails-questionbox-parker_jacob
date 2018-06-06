@@ -5,10 +5,16 @@ class Api::V1::SessionsController < ApplicationController
       user = User.find_by(username: params[:username])
 
       if user && user.authenticate(params[:password])
-          session[:api_token] = user.api_token
-          redirect_to api_v1_questions_path
+        session[:user_id] = user.id
+        session[:api_token] = user.api_token
+        redirect_to api_v1_questions_path
       else
           render json: { error: "Invalid credentials" }, status: :unauthorized
       end
+    end
+
+    def destroy
+      session[:user_id] = nil
+      redirect_to new_login_path, notice: "You have successfully logged out!"
     end
 end
