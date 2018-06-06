@@ -1,19 +1,33 @@
-<%= form_for(@user) do |f| %>
-  <div class='form-group col-md-4'>
-    <%= f.label :username %>
-    <%= f.text_field :username, class: 'form-control' %>
+<%= form_with(model: @questions, local: true) do |form| %>
+  <% if question.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(question.errors.count, "error") %> prohibited this question from being saved:</h2>
+
+      <ul>
+      <% question.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title %>
   </div>
 
-  <div class='form-group col-md-4'>
-    <%= f.label :password %>
-    <%= f.password_field :password, class: 'form-control' %>
+  <div class="field">
+    <%= form.label :content %>
+    <%= form.text_area :content %>
   </div>
 
-  <div class='form-group col-md-4'>
-    <%= f.label :password_confirmation %>
-    <%= f.password_field :password_confirmation, class: 'form-control' %>
+    <div class="field">
+    <%= form.label :image %>
+    <%= form.file_field :image %>
   </div>
 
-    <%= f.submit 'Sign Up', class: 'btn btn-success' %>
 
+  <div class="actions">
+    <%= form.submit %>
+  </div>
 <% end %>
