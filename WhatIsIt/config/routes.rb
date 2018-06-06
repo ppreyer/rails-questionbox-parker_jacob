@@ -3,7 +3,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       root 'questions#index'
       resources :questions do
-        member do
+        member do 
           resources :answers
         end
       end

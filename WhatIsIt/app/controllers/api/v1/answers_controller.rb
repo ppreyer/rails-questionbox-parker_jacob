@@ -1,48 +1,54 @@
 class Api::V1::AnswersController < ApplicationController
-  before_action :set_answer, only: [:show, :edit, :update, :destroy]
+  skip_before_action :verify_authentication
 
-  # GET /answers
-  # GET /answers.json
   def index
     @answers = Answer.all
   end
 
-  # GET /answers/1
-  # GET /answers/1.json
   def show
+    @answer = Answer.find(params[:id])
   end
 
-  # GET /answers/new
   def new
-    @answer = Answer.new
+    @question = Question.find(params[:question_id])
+    if current_user
+        @answer = Answer.new
+    else
+        redirect_to api_v1_question_path(@question), alert: "You must be logged in to comment."
+    end
   end
 
-  # GET /answers/1/edit
   def edit
+    @answer = Answer.find(params[:id])
+    if current_user
+      if current_user.id == @answer.user_id
+          @question = Question.find(params[:id])
+      else
+          redirect_to api_v1_question_path, alert: 'Only answer creator can edit.'
+      end
+    else
+      redirect_to new_api_v1_session_path, alert: "Please log in first."
+    end
   end
 
-  # POST /answers
-  # POST /answers.json
   def create
     @answer = Answer.new(answer_params)
-
     respond_to do |format|
-      if @answer.save
-        format.html { redirect_to @answer, notice: 'Answer was successfully created.' }
+      if @answer.save!        
+        format.html { redirect_to api_v1_question_path, notice: 'answer was successfully created.' }
         format.json { render :show, status: :created, location: @answer }
       else
         format.html { render :new }
-        format.json { render json: @answer.errors, status: :unprocessable_entity }
+        format.json { render json: @answers.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /answers/1
-  # PATCH/PUT /answers/1.json
   def update
+    @answer = Answer.find(params[:id])
     respond_to do |format|
       if @answer.update(answer_params)
-        format.html { redirect_to @answer, notice: 'Answer was successfully updated.' }
+        format.html { redirect_to api_v1_question_path, notice: 'answer was successfully updated.' }
         format.json { render :show, status: :ok, location: @answer }
       else
         format.html { render :edit }
@@ -51,23 +57,25 @@ class Api::V1::AnswersController < ApplicationController
     end
   end
 
-  # DELETE /answers/1
-  # DELETE /answers/1.json
   def destroy
-    @answer.destroy
-    respond_to do |format|
-      format.html { redirect_to answers_url, notice: 'Answer was successfully destroyed.' }
-      format.json { head :no_content }
+    @answer = Answer.find(params[:id])
+    if current_user
+      if current_user.id == @answer.user_id
+        @answer.destroy
+          respond_to do |format|
+          format.html { redirect_to api_v1_questions_path, alert: 'answer was successfully destroyed.' }
+          format.json { head :no_content }
+        end
+      else
+          redirect_to @answer, alert: 'Only post creator can delete.'
+      end
+    else
+      redirect_to new_api_v1_session_path, alert: 'Please log in first'
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_answer
-      @answer = Answer.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def answer_params
       params.require(:answer).permit(:content, :user_id, :question_id)
     end

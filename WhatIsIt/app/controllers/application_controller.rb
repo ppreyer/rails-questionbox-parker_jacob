@@ -9,8 +9,7 @@ class ApplicationController < ActionController::Base
     end
   
       unless user
-        redirect_to session_path
-        flash.now[:alert] = "You are not authorized, please try logging in again."
+        redirect_to api_v1_session_path, alert: "You are not authorized, please try logging in again."
         render json: { error: "You do not have permission to access these resources" }, status: :unauthorized
       end
     end
