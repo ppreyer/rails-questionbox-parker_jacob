@@ -11,11 +11,23 @@ class Api::V1::QuestionsController < ApplicationController
   end
 
   def new
+    if current_user
     @question = Question.new
+    else
+      redirect_to new_api_v1_session_path, alert: 'You must login to create a question'
+    end
   end
 
   def edit
-    @question = Question.find(params[:id])
+    if current_user
+      if current_user.id == @question.user_id
+          @question = Question.find(params[:id])
+      else
+          redirect_to api_v1_question_path, alert: 'Only question creator can edit.'
+      end
+    else
+      redirect_to new_api_v1_session_path, alert: "Please log in first."
+    end
   end
 
   def create
@@ -46,14 +58,18 @@ class Api::V1::QuestionsController < ApplicationController
 
   def destroy
       @question = Question.find(params[:id])
-      if current_user.id == @question.user_id
-        @question.destroy
-          respond_to do |format|
-          format.html { redirect_to api_v1_questions_path, alert: 'Question was successfully destroyed.' }
-          format.json { head :no_content }
+      if current_user
+        if current_user.id == @question.user_id
+          @question.destroy
+            respond_to do |format|
+            format.html { redirect_to api_v1_questions_path, alert: 'Question was successfully destroyed.' }
+            format.json { head :no_content }
+          end
+        else
+            redirect_to @question, alert: 'Only post creator can delete.'
         end
       else
-          redirect_to @question, alert: 'Only post creator can delete.'
+        redirect_to new_api_v1_session_path, alert: 'Please log in first'
       end
   end
 
