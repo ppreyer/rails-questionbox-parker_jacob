@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       end
       resources :users
       resources :sessions 
+      get 'logout', to: 'sessions#destroy', as: 'logout'
     end
   end
 end
