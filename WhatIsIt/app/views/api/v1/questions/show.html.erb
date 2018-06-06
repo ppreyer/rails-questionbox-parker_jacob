@@ -13,9 +13,9 @@
 <% if @question.image.attached? %>
 <p>
   <strong>Image:</strong>
-    <%= image_tag @recipe.image %>
+    <%= image_tag @question.image %>
 </p>
 <% end %>
 
-<%= link_to 'Edit', edit_question_path(@question) %> |
-<%= link_to 'Back', questions_path %>
+<%= link_to 'Edit', edit_api_v1_question_path %> |
+<%= link_to 'Back', api_v1_questions_path %>

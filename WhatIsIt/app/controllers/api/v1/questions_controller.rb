@@ -7,6 +7,7 @@ class Api::V1::QuestionsController < ApplicationController
   end
 
   def show
+    @question = Question.find(params[:id])
   end
 
   def new
@@ -14,16 +15,14 @@ class Api::V1::QuestionsController < ApplicationController
   end
 
   def edit
+    @question = Question.find(params[:id])
   end
 
   def create
     @question = Question.new(question_params)
-
     respond_to do |format|
-      if @question.save
-        redirect_to api_v1_question_path, alert: 'Question was successfully created.'
-        
-        format.html { redirect_to @question, notice: 'Question was successfully created.' }
+      if @question.save        
+        format.html { redirect_to api_v1_questions_path, notice: 'Question was successfully created.' }
         format.json { render :show, status: :created, location: @question }
       else
         format.html { render :new }
@@ -33,9 +32,10 @@ class Api::V1::QuestionsController < ApplicationController
   end
 
   def update
+    @question = Question.find(params[:id])
     respond_to do |format|
       if @question.update(question_params)
-        format.html { redirect_to @question, notice: 'Question was successfully updated.' }
+        format.html { redirect_to api_v1_question_path, notice: 'Question was successfully updated.' }
         format.json { render :show, status: :ok, location: @question }
       else
         format.html { render :edit }
@@ -45,17 +45,16 @@ class Api::V1::QuestionsController < ApplicationController
   end
 
   def destroy
-      @question = question.find(params[:id])
+      @question = Question.find(params[:id])
       if current_user.id == @question.user_id
-          @question.destroy
-          redirect_to questions_path
+        @question.destroy
+          respond_to do |format|
+          format.html { redirect_to api_v1_questions_path, alert: 'Question was successfully destroyed.' }
+          format.json { head :no_content }
+        end
       else
           redirect_to @question, alert: 'Only post creator can delete.'
       end
-    respond_to do |format|
-      format.html { redirect_to questions_url, notice: 'Question was successfully destroyed.' }
-      format.json { head :no_content }
-    end
   end
 
   private
