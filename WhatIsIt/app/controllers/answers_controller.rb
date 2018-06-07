@@ -1,14 +1,12 @@
-class Api::V1::AnswersController < ApplicationController
+class AnswersController < ApplicationController
   skip_before_action :verify_authentication
 
   def index
     @answers = Answer.all
-    render json: @answers
   end
 
   def show
     @answer = Answer.find(params[:id])
-    render json: @answer
   end
 
   def new
@@ -16,7 +14,7 @@ class Api::V1::AnswersController < ApplicationController
     if current_user
         @answer = Answer.new
     else
-        redirect_to api_v1_question_path(@question), { error: "You must login to create a question" }, status: 401
+        redirect_to question_path(@question), alert: "You must be logged in to comment."
     end
   end
 
@@ -26,10 +24,10 @@ class Api::V1::AnswersController < ApplicationController
       if current_user.id == @answer.user_id
           @question = Question.find(params[:id])
       else
-          redirect_to api_v1_question_path, { error: "Only question creator can edit" }, status: 401
+          redirect_to question_path, alert: 'Only answer creator can edit.'
       end
     else
-      redirect_to new_api_v1_session_path, { error: "You must login to create a question" }, status: 401
+      redirect_to new_session_path, alert: "Please log in first."
     end
   end
 
@@ -39,9 +37,9 @@ class Api::V1::AnswersController < ApplicationController
     respond_to do |format|
       if @answer.save!
         send_answer_email(@user)        
-        format.json { render :show, status: :created, location: @answer }
+        format.html { redirect_to question_path, notice: 'answer was successfully created.' }
       else
-        format.json { render json: @answers.errors, status: :unprocessable_entity }
+        format.html { render :new }
       end
     end
   end
@@ -50,9 +48,9 @@ class Api::V1::AnswersController < ApplicationController
     @answer = Answer.find(params[:id])
     respond_to do |format|
       if @answer.update(answer_params)
-        format.json { render :show, status: :ok, location: @answer }
+        format.html { redirect_to question_path, notice: 'answer was successfully updated.' }
       else
-        format.json { render json: @answer.errors, status: :unprocessable_entity }
+        format.html { render :edit }
       end
     end
   end
@@ -63,13 +61,13 @@ class Api::V1::AnswersController < ApplicationController
       if current_user.id == @answer.user_id
         @answer.destroy
           respond_to do |format|
-          format.json { head :no_content }
+          format.html { redirect_to questions_path, alert: 'answer was successfully destroyed.' }
         end
       else
-          redirect_to @answer, { error: "Only post creator can delete." }, status: 401
+          redirect_to @answer, alert: 'Only post creator can delete.'
       end
     else
-      redirect_to new_api_v1_session_path, { error: "You must login to create a question" }, status: 401
+      redirect_to new_session_path, alert: 'Please log in first'
     end
   end
 

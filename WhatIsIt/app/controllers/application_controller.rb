@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
     include ActionController::HttpAuthentication::Token::ControllerMethods
     before_action :verify_authentication
     helper_method :current_user
+    protect_from_forgery with: :null_session
   
     def verify_authentication
       user = authenticate_with_http_token do |token, options|
@@ -21,11 +22,7 @@ class ApplicationController < ActionController::Base
     end
 
     def current_user    
-      # if the session is not empty...
-      if session[:user_id]
-        # if I have the variable @user use that if not set it to this...
-        @user ||= User.find(session[:user_id])
+        @user ||= User.find(api_token: bearer_token)
         return @user
-      end
     end
 end
