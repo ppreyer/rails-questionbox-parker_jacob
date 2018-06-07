@@ -1,0 +1,379 @@
+<style>
+body {
+     font-family: 'Roboto', sans-serif;
+ }
+ table, td {
+    border: 1px solid black;
+}
+table {
+    margin: 5px;
+}
+th, td {
+    padding: 10px 20px;
+}
+</style>
+
+
+<h1>What Is It API Documentation</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Version</th>
+            <th>Date</th>
+            <th>Author</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>07-June-2018</td>
+            <td>jacobfh, ppreyer</td>
+            <td>API for object identification API application</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>1. Register New User</h2>
+<h3>Request</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Method</th>
+            <th>URL</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>POST</td>
+            <td>/api/v1/users</td>
+        </tr>
+    </tbody>
+</table>
+
+<table>
+    <thead>
+        <tr>
+            <th>Params</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>username</td>
+            <td>string</td>
+        </tr>
+        <tr>
+            <td>password</td>
+            <td>string</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Response</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Response</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>201</td>
+            <td>Created. Response will show status of 201 and user credentials and generated api-token.</td>
+        </tr>
+        <tr>
+            <td>400</td>
+            <td>Invalid parameters (error type will display)</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>2. Login</h2>
+<p>Use Http Authentication to login and expose user's API token, which is required for some actions.</p>
+
+<h3>Request</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Method</th>
+            <th>URL</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>POST</td>
+            <td>/api/v1/sessions</td>
+        </tr>
+    </tbody>
+</table>
+
+<table>
+    <thead>
+        <tr>
+            <th>Params</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>username</td>
+            <td>string</td>
+        </tr>
+        <tr>
+            <td>password</td>
+            <td>string</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Response</h3>
+<p>api_token exposed after login needs to be added to header for future authenticated actions.</p>
+<table>
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Response</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>200</td>
+            <td>{<br>
+                "token": "(api_token)"<br>
+            }</td>
+        </tr>
+        <tr>
+            <td>401</td>
+            <td>Unauthorized: Invalid credentials</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>3. Get All questions</h2>
+
+<h3>Request</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Method</th>
+            <th>URL</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>GET</td>
+            <td>/api/v1/questions</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Response</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Response</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>200</td>
+            <td>Response will be an object/ array containing a list of question objects. question object structure: <br>
+            {<br>
+                "id": 6,<br>
+                "content": "[\"Nesciunt aut non libero et.\", <br>\"Dolore exercitationem repellat suscipit voluptas atque possimus.\"]",<br>
+                "user_id": 1,<br>
+                "created_at": "2018-06-02T13:06:37.695Z",<br>
+                "updated_at": "2018-06-02T13:06:37.695Z",<br>
+                "question_id": null<br>
+            }</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>4. Get One question</h2>
+
+<h3>Request</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Method</th>
+            <th>URL</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>GET</td>
+            <td>/api/v1/questions/(:id)</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Response</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Response</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>200</td>
+            <td>Response includes question object and related action URLs: <br>
+            {<br>
+                "links": {<br>
+                "self": "/api/v1/questions/6",<br>
+                "list": "/api/v1/questions",<br>
+                "delete": {<br>
+                "method": "DELETE",<br>
+                "href": "/api/v1/questions/6"<br>
+                }<br>
+            },<br>
+                "data": {<br>
+                "id": 6,<br>
+                "attributes": {<br>
+                "id": 6,<br>
+                "text": "[\"Nesciunt aut non libero et.\", \"Dolore exercitationem repellat suscipit voluptas atque possimus.\"]",<br>
+                "user_id": 1<br>
+                }<br>
+            }<br>
+            }</td>
+        </tr>
+        <tr>
+            <td>404</td>
+            <td>Resource not found.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>5. Create One question</h2>
+
+<h3>Request</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Method</th>
+            <th>URL</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>POST</td>
+            <td>/api/v1/questions</td>
+        </tr>
+    </tbody>
+</table>
+<table>
+    <thead>
+        <tr>
+            <th>Params</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>text</td>
+            <td>string (2-250 characters only)</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Response</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Response</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>201</td>
+            <td>Created. Response includes question object and related action URLs.</td>
+        </tr>
+        <tr>
+            <td>400</td>
+            <td>Invalid parameter (error type will display)</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>6. Delete One question</h2>
+<p>User can only delete their own questions. (Admin user can delete or edit any question.)</p>
+<h3>Request</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Method</th>
+            <th>URL</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>DELETE</td>
+            <td>/api/v1/questions/(:id)</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Response</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Response</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>204</td>
+            <td>No Content (question successfully deleted)</td>
+        </tr>
+        <tr>
+            <td>401</td>
+            <td>Not authorized.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>7. answer a question</h2>
+<p>User can only answer other user's questions.</p>
+<h3>Request</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Method</th>
+            <th>URL</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>POST</td>
+            <td>/api/v1/questions/(:id)/answers</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Response</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Response</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>201</td>
+            <td>answer Created.</td>
+        </tr>
+        <tr>
+            <td>400</td>
+            <td>Invalid request (error type will display).</td>
+        </tr>
+    </tbody>
+</table>

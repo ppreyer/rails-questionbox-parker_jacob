@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
     end
 
     def current_user    
-        @user ||= User.find(api_token: bearer_token)
+        @user ||= User.find_by(api_token: bearer_token)
         return @user
     end
 end

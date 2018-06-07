@@ -8,7 +8,6 @@ Rails.application.routes.draw do
   resources :sessions
   get 'logout', to: 'sessions#destroy', as: 'logout'
   
-  root 'questions#index'
 
 
   namespace :api do
@@ -23,4 +22,6 @@ Rails.application.routes.draw do
       get 'logout', to: 'sessions#destroy', as: 'logout'
     end
   end
+  resource :docs, only: :index
+  root 'docs#index'
 end
