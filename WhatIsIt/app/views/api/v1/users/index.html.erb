@@ -4,6 +4,12 @@
 
 <table>
   <thead>
+  <% if @user.image.attached? %>
+          <p>
+            <strong>Image:</strong>
+            <%= image_tag @user.image %>
+          </p>
+        <% end %>
     <tr>
       <th>Title</th>
       <th>Content</th>
@@ -28,4 +34,4 @@
 
 <br>
 
-<%= link_to 'New User', new_api_v1_user_path %>
+<%= link_to 'Edit profile', edit_api_v1_user_path(@user) %>

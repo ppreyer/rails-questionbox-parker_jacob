@@ -9,8 +9,8 @@
 </p>
 
 <p>
-  <strong>Content:</strong>
-  <%= @question.content %>
+<strong>Content:</strong>
+  <%= markdown(@question.content) %>
 </p>
 
 <% if @question.image.attached? %>

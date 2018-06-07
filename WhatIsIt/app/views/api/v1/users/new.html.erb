@@ -11,6 +11,11 @@
     <%= f.password_field :password, class: 'form-control' %>
   </div>
 
+  <div class="field">
+  <%= f.label :image %>
+  <%= f.file_field :image %>
+</div>
+
     <%= f.submit 'Sign Up', class: 'btn btn-success' %>
 
 <% end %>

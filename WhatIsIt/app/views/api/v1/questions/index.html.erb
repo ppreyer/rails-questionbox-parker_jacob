@@ -16,7 +16,7 @@
     <% @questions.each do |question| %>
       <tr>
         <td><%= question.title %></td>
-        <td><%= question.content %></td>
+        <td><%= markdown(question.content) %></td>
         <td><%= "Posted by #{question.user}"
         pluralize(question.answers.count, "Answer") %></td>
         <td><%= link_to 'Show', api_v1_question_path(question)%></td>
