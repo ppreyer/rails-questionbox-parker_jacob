@@ -3,7 +3,7 @@ class Api::V1::QuestionsController < ApplicationController
   skip_before_action :verify_authentication
 
   def index
-    @questions = Question.all
+    @questions = Question.order(:title).page(params[:page])
   end
 
   def show

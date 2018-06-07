@@ -28,12 +28,6 @@
 
         <p class="font-weight-light"><%= answer.content%></p>
         <%= "Answered by #{answer.user_id}"%>
-
-        <% if current_user.id == answer.user_id %>
-        <%= link_to 'Edit answer', edit_api_v1_answer_path(question_id: @question.id), class:'btn text-light btn-sm', style:'background-color: #137547;'  %> |
-        <%= link_to 'Delete answer', api_v1_answer_path(answer),
-               method: :delete, class:'btn text-light btn-sm', style:'background-color: #137547;' %>
-        <% end %>
 </p>
     </div>
 <% end %>

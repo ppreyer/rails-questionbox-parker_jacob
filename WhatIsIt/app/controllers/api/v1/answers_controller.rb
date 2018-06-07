@@ -32,9 +32,11 @@ class Api::V1::AnswersController < ApplicationController
   end
 
   def create
-    @answer = Answer.new(answer_params)
+    @question = Question.find(params[:id])
+    @user = User.find_by(params[:user_id])
     respond_to do |format|
-      if @answer.save!        
+      if @answer.save!
+        send_answer_email(@user)        
         format.html { redirect_to api_v1_question_path, notice: 'answer was successfully created.' }
         format.json { render :show, status: :created, location: @answer }
       else
@@ -78,5 +80,9 @@ class Api::V1::AnswersController < ApplicationController
 
     def answer_params
       params.require(:answer).permit(:content, :user_id, :question_id)
+    end
+
+    def send_answer_email(user)
+      UserMailer.answer(user).deliver_now
     end
 end
