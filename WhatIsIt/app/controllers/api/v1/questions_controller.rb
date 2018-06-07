@@ -79,6 +79,6 @@ class Api::V1::QuestionsController < ApplicationController
     end
 
     def question_params
-      params.require(:question).permit(:title, :content, :user_id)
+      params.require(:question).permit(:title, :content, :user_id, :image)
     end
 end

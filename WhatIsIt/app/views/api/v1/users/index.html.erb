@@ -1,15 +1,14 @@
 <p id="notice"><%= notice %></p>
+<% if @user.image.attached? %>
+<p>
+  <%= image_tag @user.image %>
+</p>
+<% end %>
 
 <h1><%= current_user %>'s Questions:</h1>
 
 <table>
   <thead>
-  <% if @user.image.attached? %>
-          <p>
-            <strong>Image:</strong>
-            <%= image_tag @user.image %>
-          </p>
-        <% end %>
     <tr>
       <th>Title</th>
       <th>Content</th>
