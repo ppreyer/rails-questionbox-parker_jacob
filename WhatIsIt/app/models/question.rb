@@ -14,6 +14,7 @@ class Question < ApplicationRecord
   has_many :answers
   belongs_to :user
   has_one_attached :image
+  paginates_per 50
 
   validates :title, presence: true
   validates :content, presence: true

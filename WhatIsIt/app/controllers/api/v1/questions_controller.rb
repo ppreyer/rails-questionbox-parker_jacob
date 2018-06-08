@@ -3,20 +3,22 @@ class Api::V1::QuestionsController < ApplicationController
   skip_before_action :verify_authentication, only: [:index, :show]
 
   def index
-    @questions = Question.all
+    @questions = Question.order(:created_at).reverse_order.page(params[:page])
     if @questions
-      render json: @questions 
+      render "api/v1/questions/index.json" 
     else
       render json: @questions.errors, status: 400
     end
   end
 
   def show
+    binding.pry
     @question = Question.find(params[:id])
+    @user = User.find(@question.user_id)
+    @question_username = @user.username
     @answers = @question.answers
     if @question
-      # render "api/v1/questions/index.json"
-      render json: @question
+      render "api/v1/questions/show.json"
     else
       render json: @question.errors, status: 400
     end
@@ -101,6 +103,6 @@ class Api::V1::QuestionsController < ApplicationController
     end
 
     def question_params
-      params.require(:question).permit(:title, :content, :user_id, :username, :image)
+      params.require(:question).permit(:title, :content, :user_id, :image)
     end
 end
