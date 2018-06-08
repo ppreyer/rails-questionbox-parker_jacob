@@ -16,6 +16,7 @@ class Api::V1::UsersController < ApplicationController
       render json: @user.questions.all, status: 200
     else
       format.json { render json: @user.errors, status: :unprocessable_entity }
+    end
   end
 
   # GET /users/new
@@ -32,9 +33,9 @@ class Api::V1::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save!
-      render json: @user, status: 201
+      render json: @user.api_token, status: 201
     else
-      new_api_v1_user_path
+      render json: { error: "You did not follow the user params" }, status: 401 
     end
   end
 

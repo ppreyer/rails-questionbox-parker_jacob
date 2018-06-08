@@ -30,10 +30,10 @@ class Api::V1::AnswersController < ApplicationController
       if current_user.id == @answer.user_id
           @question = Question.find(params[:id])
       else
-          redirect_to api_v1_question_path, { error: "Only question creator can edit" }, status: 401
+          render json: { error: "Only question creator can edit" }, status: 401
       end
     else
-      redirect_to new_api_v1_session_path, { error: "You must login to create a question" }, status: 401
+      render json: { error: "You must login to create a question" }, status: 401
     end
   end
 
@@ -68,10 +68,10 @@ class Api::V1::AnswersController < ApplicationController
           format.json { head :no_content }
         end
       else
-          redirect_to @answer, { error: "Only post creator can delete." }, status: 401
+          render json: { error: "Only post creator can delete." }, status: 401
       end
     else
-      redirect_to new_api_v1_session_path, { error: "You must login to create a question" }, status: 401
+      render json: { error: "You must login to create a question" }, status: 401
     end
   end
 

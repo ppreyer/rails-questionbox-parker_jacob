@@ -96,6 +96,78 @@ th, td {
 </head>
 <body>
 <h2>
+  Tables
+</h2>
+<p>
+  <table>
+    <tr>
+      <th>"active_storage_attachments"</th>
+    </tr>
+    <tr>
+        <td>t.string "name"</td>
+        <td>  t.string "record_type"</td>
+        <td> t.bigint "record_id"</td>
+        <td>  t.bigint "blob_id"</td>
+        <td>  t.datetime "created_at"</td>
+        <td>  t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id" </td>
+        <td>  t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true </td>
+    </tr>
+    <tr>
+      <th>"active_storage_blobs" </th>
+    </tr>
+    <tr>
+      <td> t.string "key"</td>
+      <td> t.string "filename"</td>
+      <td> t.string "content_type" </td>
+      <td> t.text "metadata" </td>
+      <td>  t.bigint "byte_size"</td>
+      <td> t.string "checksum"</td>
+      <td>  t.datetime "created_at"</td>
+      <td>  t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true </td>
+    </tr>
+    <tr>
+      <th> "answers" </th> 
+    </tr>
+    <tr>
+        <td>  t.text "content" </td>
+        <td>   t.datetime "created_at"</td>
+        <td>   t.datetime "updated_at"</td>
+        <td>   t.integer "user_id" </td>
+        <td>  t.integer "question_id" </td>
+        <td>  t.boolean "verify_answer", default: false </td>
+    </tr>
+    <tr>
+      <th> "questions" </th>
+    </tr>
+    <tr>
+        <td>  t.string "title" </td>
+        <td> t.text "content" </td>
+        <td>  t.datetime "created_at"</td>
+        <td>  t.datetime "updated_at"</td>
+        <td>  t.integer "user_id" </td>
+    </tr>
+    <tr>
+      <th> "users" </th>
+    </tr>
+    <tr>
+      <td>  t.datetime "created_at"</td>
+      <td> t.datetime "updated_at"</td>
+      <td>  t.string "username" </td>
+      <td> t.string "password_digest" </td>
+      <td> t.string "api_token" </td>
+    </tr>
+  </table>
+</p>
+
+
+
+
+
+
+
+
+
+<h2>
   Status
 </h2>
 
