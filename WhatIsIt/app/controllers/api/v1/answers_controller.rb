@@ -2,7 +2,7 @@ class Api::V1::AnswersController < ApplicationController
   skip_before_action :verify_authentication
 
   def index
-    @answers = Answer.order(:title).all
+    @answers = Answer.all
     if @answers
       render json: @answers
     else
@@ -78,7 +78,7 @@ class Api::V1::AnswersController < ApplicationController
   private
 
     def answer_params
-      params.require(:answer).permit(:content, :user_id, :question_id, :verify_answer)
+      params.require(:answer).permit(:content, :user_id, :question_id, :verify_answer, :username)
     end
 
     def send_answer_email(user)

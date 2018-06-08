@@ -3,9 +3,9 @@ class Api::V1::QuestionsController < ApplicationController
   skip_before_action :verify_authentication, only: [:index, :show]
 
   def index
-    @questions = Question.order(:title).page(params[:page])
+    @questions = Question.all
     if @questions
-      render json: @questions
+      render json: @questions 
     else
       render json: @questions.errors, status: 400
     end
@@ -15,6 +15,7 @@ class Api::V1::QuestionsController < ApplicationController
     @question = Question.find(params[:id])
     @answers = @question.answers
     if @question
+      # render "api/v1/questions/index.json"
       render json: @question
     else
       render json: @question.errors, status: 400
@@ -100,6 +101,6 @@ class Api::V1::QuestionsController < ApplicationController
     end
 
     def question_params
-      params.require(:question).permit(:title, :content, :user_id, :image)
+      params.require(:question).permit(:title, :content, :user_id, :username, :image)
     end
 end
