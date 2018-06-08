@@ -12,6 +12,10 @@ class Api::V1::UsersController < ApplicationController
   # GET /users/1.json
   def show
     @user = User.find(params[:id])
+    if @user
+      render json: @user.questions.all, status: 200
+    else
+      format.json { render json: @user.errors, status: :unprocessable_entity }
   end
 
   # GET /users/new
@@ -28,7 +32,7 @@ class Api::V1::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save!
-      redirect_to new_api_v1_session_path
+      render json: @user, status: 201
     else
       new_api_v1_user_path
     end
@@ -49,9 +53,12 @@ class Api::V1::UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    @user.destroy
-    respond_to do |format|
-      format.json { head :no_content }
+    if @user.destroy
+      respond_to do |format|
+        format.json { head :no_content }
+      end
+    else 
+      format.json { render json: @user.errors, status: :unprocessable_entity }
     end
   end
 

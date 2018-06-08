@@ -4,19 +4,29 @@ class Api::V1::QuestionsController < ApplicationController
 
   def index
     @questions = Question.order(:title).page(params[:page])
-    render json: @questions
+    if @questions
+      render json: @questions
+    else
+      render json: @questions.errors, status: 400
+    end
   end
 
   def show
     @question = Question.find(params[:id])
-    render json: @question
+    @answers = @question.answers
+    if @question
+      render json: @question
+    else
+      render json: @question.errors, status: 400
+    end
   end
 
   def new
     if current_user
-    @question = Question.new
+      @question = Question.new
+      render json: @question, status: 200
     else
-      redirect_to new_api_v1_session_path, { error: "You must login to create a question" }, status: 401
+      render json: @question.errors, status: 401
     end
   end
 
@@ -24,33 +34,47 @@ class Api::V1::QuestionsController < ApplicationController
     if current_user
       if current_user.id == @question.user_id
           @question = Question.find(params[:id])
+          render json: @question, status: 200
       else
-          redirect_to api_v1_question_path, { error: "Only question creator can edit" }, status: 401
+        render json: { error: "Only question user can edit." }, status: :unauthorized
       end
     else
-      redirect_to new_api_v1_session_path, { error: "Please log in first" }, status: 401
+      render json: { error: "Please log in first" }, status: 401
     end
   end
 
   def create
-    @question = Question.new(question_params)
-    respond_to do |format|
-      if @question.save        
-        format.json { render :show, status: :created, location: @question }
-      else
-        format.json { render json: @question.errors, status: :unprocessable_entity }
+    if current_user 
+      @question = Question.new(question_params)
+      respond_to do |format|
+        if @question.save        
+          format.json { render :show, status: :created, location: @question }
+        else
+          format.json { render json: @question.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      render json: { error: "Please log in first" }, status: 401
     end
+
   end
 
   def update
     @question = Question.find(params[:id])
-    respond_to do |format|
-      if @question.update(question_params)
-        format.json { render :show, status: :ok, location: @question }
+    if current_user
+      if current_user.id == @question.user_id
+        if @question.update(question_params)
+          respond_to do |format|
+            format.json { render :show, status: :ok, location: @question }
+          else
+            format.json { render json: @question.errors, status: :unprocessable_entity }
+          end
+        end
       else
         format.json { render json: @question.errors, status: :unprocessable_entity }
       end
+    else
+      format.json { render json: @question.errors, status: :unprocessable_entity }
     end
   end
 
@@ -63,10 +87,10 @@ class Api::V1::QuestionsController < ApplicationController
             format.json { head :no_content }
           end
         else
-            redirect_to @question, { error: "Only post creator can delete" }, status: 401 
+          render json: { error: "Only question user can delete." }, status: :unauthorized
         end
       else
-        redirect_to new_api_v1_session_path, { error: "Please log in first" }, status: 401
+        render json: { error: "Please log in first" }, status: 401
       end
   end
 

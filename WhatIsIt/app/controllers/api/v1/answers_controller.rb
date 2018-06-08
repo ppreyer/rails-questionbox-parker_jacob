@@ -2,8 +2,12 @@ class Api::V1::AnswersController < ApplicationController
   skip_before_action :verify_authentication
 
   def index
-    @answers = Answer.all
-    render json: @answers
+    @answers = Answer.order(:title).all
+    if @answers
+      render json: @answers
+    else
+      render json: @answers.errors, status: 400
+    end
   end
 
   def show
@@ -16,7 +20,7 @@ class Api::V1::AnswersController < ApplicationController
     if current_user
         @answer = Answer.new
     else
-        redirect_to api_v1_question_path(@question), { error: "You must login to create a question" }, status: 401
+        render json: { error: "You must login to create a question" }, status: 401
     end
   end
 
@@ -34,14 +38,12 @@ class Api::V1::AnswersController < ApplicationController
   end
 
   def create
-    @question = Question.find(params[:id])
-    @user = User.find_by(params[:user_id])
-    respond_to do |format|
-      if @answer.save!
-        send_answer_email(@user)        
-        format.json { render :show, status: :created, location: @answer }
-      else
-        format.json { render json: @answers.errors, status: :unprocessable_entity }
+    @answer = Answer.new(answer_params)
+    if @answer.save   
+      render json: @answer
+    else
+      respond_to do |format|   
+        format.json { render json: @answer.errors, status: :unprocessable_entity }
       end
     end
   end
