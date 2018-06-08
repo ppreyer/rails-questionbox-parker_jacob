@@ -8,6 +8,13 @@
   json.content @question.content
   json.image @question.image.name
    json.answers @question.answers do |answer|
-
+   json.id answer.id
+   json.answerUsername @answer_username
+   json.answerCreated answer.created_at
+   json.answerUpdated answer.updated_at
+   json.answerContent answer.content
+   json.verify answer.verify_answer
+   json.answerUserID answer.user_id
+   json.answerimage answer.image.name
    end
 

@@ -12,10 +12,10 @@ class Api::V1::QuestionsController < ApplicationController
   end
 
   def show
-    binding.pry
     @question = Question.find(params[:id])
     @user = User.find(@question.user_id)
     @question_username = @user.username
+    @answer_username = @user.username
     @answers = @question.answers
     if @question
       render "api/v1/questions/show.json"
