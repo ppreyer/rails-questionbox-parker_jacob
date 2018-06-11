@@ -4,10 +4,8 @@ class Api::V1::QuestionsController < ApplicationController
 
   def index
     @questions = Question.order(:created_at).reverse_order.page(params[:page])
-    @questions = @questions.each do |question|
-      @user = User.find(question.user_id)
-      @question_username = @user.username
-    end
+    # @question = Question.find(question.id)
+    # @user = User.find(@question.user_id)
     if @questions
       render "api/v1/questions/index.json" 
     else
