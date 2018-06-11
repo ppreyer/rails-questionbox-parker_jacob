@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Questions</h1>
+<%= paginate @questions %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Content</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @questions.each do |question| %>
+      <tr>
+        <td><%= question.title %></td>
+        <td><%= question.content %></td>
+        <td><%= "Posted by #{question.user}"
+        pluralize(question.answers.count, "Answer") %></td>
+        <td><%= link_to 'Show', api_v1_question_path(question)%></td>
+        <% if current_user %>
+        <td><%= link_to 'Edit', edit_api_v1_question_path(question) %></td>
+        <td><%= link_to 'Destroy', api_v1_question_path(question), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+    
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Question', new_api_v1_question_path %>

@@ -1,0 +1,1314 @@
+<style>
+body {
+     font-family: 'Roboto', sans-serif;
+ }
+ table, td {
+    border: 1px solid black;
+}
+table {
+    margin: 5px;
+}
+th, td {
+    padding: 10px 20px;
+}
+</style>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Routes</title>
+  <style>
+    body { background-color: #fff; color: #333; }
+
+    body, p, ol, ul, td {
+      font-family: helvetica, verdana, arial, sans-serif;
+      font-size:   13px;
+      line-height: 18px;
+    }
+
+    pre {
+      background-color: #eee;
+      padding: 10px;
+      font-size: 11px;
+      white-space: pre-wrap;
+    }
+
+    a { color: #000; }
+    a:visited { color: #666; }
+    a:hover { color: #fff; background-color:#000; }
+
+    h2 { padding-left: 10px; }
+
+      #route_table {
+    margin: 0;
+    border-collapse: collapse;
+  }
+
+  #route_table thead tr {
+    border-bottom: 2px solid #ddd;
+  }
+
+  #route_table thead tr.bottom {
+    border-bottom: none;
+  }
+
+  #route_table thead tr.bottom th {
+    padding: 10px 0;
+    line-height: 15px;
+  }
+
+  #route_table thead tr.bottom th input#search {
+    -webkit-appearance: textfield;
+  }
+
+  #route_table tbody tr {
+    border-bottom: 1px solid #ddd;
+  }
+
+  #route_table tbody tr:nth-child(odd) {
+    background: #f2f2f2;
+  }
+
+  #route_table tbody.exact_matches,
+  #route_table tbody.fuzzy_matches {
+    background-color: LightGoldenRodYellow;
+    border-bottom: solid 2px SlateGrey;
+  }
+
+  #route_table tbody.exact_matches tr,
+  #route_table tbody.fuzzy_matches tr {
+    background: none;
+    border-bottom: none;
+  }
+
+  #route_table td {
+    padding: 4px 30px;
+  }
+
+  #path_search {
+    width: 80%;
+    font-size: inherit;
+  }
+
+  </style>
+</head>
+<body>
+<h2>
+  Tables
+</h2>
+<p>
+  <table>
+    <tr>
+      <th>"active_storage_attachments"</th>
+    </tr>
+    <tr>
+        <td>t.string "name"</td>
+        <td>  t.string "record_type"</td>
+        <td> t.bigint "record_id"</td>
+        <td>  t.bigint "blob_id"</td>
+        <td>  t.datetime "created_at"</td>
+        <td>  t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id" </td>
+        <td>  t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true </td>
+    </tr>
+    <tr>
+      <th>"active_storage_blobs" </th>
+    </tr>
+    <tr>
+      <td> t.string "key"</td>
+      <td> t.string "filename"</td>
+      <td> t.string "content_type" </td>
+      <td> t.text "metadata" </td>
+      <td>  t.bigint "byte_size"</td>
+      <td> t.string "checksum"</td>
+      <td>  t.datetime "created_at"</td>
+      <td>  t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true </td>
+    </tr>
+    <tr>
+      <th> "answers" </th> 
+    </tr>
+    <tr>
+        <td>  t.text "content" </td>
+        <td>   t.datetime "created_at"</td>
+        <td>   t.datetime "updated_at"</td>
+        <td>   t.integer "user_id" </td>
+        <td>  t.integer "question_id" </td>
+        <td>  t.boolean "verify_answer", default: false </td>
+    </tr>
+    <tr>
+      <th> "questions" </th>
+    </tr>
+    <tr>
+        <td>  t.string "title" </td>
+        <td> t.text "content" </td>
+        <td>  t.datetime "created_at"</td>
+        <td>  t.datetime "updated_at"</td>
+        <td>  t.integer "user_id" </td>
+    </tr>
+    <tr>
+      <th> "users" </th>
+    </tr>
+    <tr>
+      <td>  t.datetime "created_at"</td>
+      <td> t.datetime "updated_at"</td>
+      <td>  t.string "username" </td>
+      <td> t.string "password_digest" </td>
+      <td> t.string "api_token" </td>
+    </tr>
+  </table>
+</p>
+
+
+
+
+
+
+
+
+
+<h2>
+  Status
+</h2>
+
+<p>
+Either a sucessful or failed response to an api request</p>
+
+<p>
+Status 201 = Successfully created <br>
+Status 401 = There was a problem processing your request
+
+<h2>
+  Routes
+</h2>
+
+<p>
+  Routes match in priority from top to bottom
+</p>
+
+<table id='route_table' class='route_table'>
+  <thead>
+    <tr>
+      <th>Helper</th>
+      <th>HTTP Verb</th>
+      <th>Path</th>
+      <th>Controller#Action</th>
+    </tr>
+    <tr class='bottom'>
+      <th>
+        <a data-route-helper="_path" title="Returns a relative path (without the http or domain)" href="#">Path</a> /
+        <a data-route-helper="_url" title="Returns an absolute URL (with the http and domain)" href="#">Url</a>
+      </th>
+      <th>
+      </th>
+      <th>
+        <input id="search" placeholder="Path Match" type="search" name="path[]" />
+      </th>
+      <th>
+      </th>
+    </tr>
+  </thead>
+  <tbody class='exact_matches' id='exact_matches'>
+  </tbody>
+  <tbody class='fuzzy_matches' id='fuzzy_matches'>
+  </tbody>
+  <tbody>
+    <tr class='route_row' data-helper='path'>
+  <td data-route-name='answers'>
+      answers<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/questions/:id/answers(.:format)'>
+    /questions/:id/answers(.:format)
+  </td>
+  <td>
+    <p>answers#index</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path='/questions/:id/answers(.:format)'>
+    /questions/:id/answers(.:format)
+  </td>
+  <td>
+    <p>answers#create</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='new_answer'>
+      new_answer<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/questions/:id/answers/new(.:format)'>
+    /questions/:id/answers/new(.:format)
+  </td>
+  <td>
+    <p>answers#new</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='edit_answer'>
+      edit_answer<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/questions/:id/answers/:id/edit(.:format)'>
+    /questions/:id/answers/:id/edit(.:format)
+  </td>
+  <td>
+    <p>answers#edit</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='answer'>
+      answer<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/questions/:id/answers/:id(.:format)'>
+    /questions/:id/answers/:id(.:format)
+  </td>
+  <td>
+    <p>answers#show</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PATCH
+  </td>
+  <td data-route-path='/questions/:id/answers/:id(.:format)'>
+    /questions/:id/answers/:id(.:format)
+  </td>
+  <td>
+    <p>answers#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PUT
+  </td>
+  <td data-route-path='/questions/:id/answers/:id(.:format)'>
+    /questions/:id/answers/:id(.:format)
+  </td>
+  <td>
+    <p>answers#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    DELETE
+  </td>
+  <td data-route-path='/questions/:id/answers/:id(.:format)'>
+    /questions/:id/answers/:id(.:format)
+  </td>
+  <td>
+    <p>answers#destroy</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='questions'>
+      questions<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/questions(.:format)'>
+    /questions(.:format)
+  </td>
+  <td>
+    <p>questions#index</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path='/questions(.:format)'>
+    /questions(.:format)
+  </td>
+  <td>
+    <p>questions#create</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='new_question'>
+      new_question<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/questions/new(.:format)'>
+    /questions/new(.:format)
+  </td>
+  <td>
+    <p>questions#new</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='edit_question'>
+      edit_question<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/questions/:id/edit(.:format)'>
+    /questions/:id/edit(.:format)
+  </td>
+  <td>
+    <p>questions#edit</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='question'>
+      question<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/questions/:id(.:format)'>
+    /questions/:id(.:format)
+  </td>
+  <td>
+    <p>questions#show</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PATCH
+  </td>
+  <td data-route-path='/questions/:id(.:format)'>
+    /questions/:id(.:format)
+  </td>
+  <td>
+    <p>questions#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PUT
+  </td>
+  <td data-route-path='/questions/:id(.:format)'>
+    /questions/:id(.:format)
+  </td>
+  <td>
+    <p>questions#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    DELETE
+  </td>
+  <td data-route-path='/questions/:id(.:format)'>
+    /questions/:id(.:format)
+  </td>
+  <td>
+    <p>questions#destroy</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='users'>
+      users<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/users(.:format)'>
+    /users(.:format)
+  </td>
+  <td>
+    <p>users#index</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path='/users(.:format)'>
+    /users(.:format)
+  </td>
+  <td>
+    <p>users#create</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='new_user'>
+      new_user<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/users/new(.:format)'>
+    /users/new(.:format)
+  </td>
+  <td>
+    <p>users#new</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='edit_user'>
+      edit_user<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/users/:id/edit(.:format)'>
+    /users/:id/edit(.:format)
+  </td>
+  <td>
+    <p>users#edit</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='user'>
+      user<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/users/:id(.:format)'>
+    /users/:id(.:format)
+  </td>
+  <td>
+    <p>users#show</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PATCH
+  </td>
+  <td data-route-path='/users/:id(.:format)'>
+    /users/:id(.:format)
+  </td>
+  <td>
+    <p>users#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PUT
+  </td>
+  <td data-route-path='/users/:id(.:format)'>
+    /users/:id(.:format)
+  </td>
+  <td>
+    <p>users#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    DELETE
+  </td>
+  <td data-route-path='/users/:id(.:format)'>
+    /users/:id(.:format)
+  </td>
+  <td>
+    <p>users#destroy</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='sessions'>
+      sessions<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/sessions(.:format)'>
+    /sessions(.:format)
+  </td>
+  <td>
+    <p>sessions#index</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path='/sessions(.:format)'>
+    /sessions(.:format)
+  </td>
+  <td>
+    <p>sessions#create</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='new_session'>
+      new_session<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/sessions/new(.:format)'>
+    /sessions/new(.:format)
+  </td>
+  <td>
+    <p>sessions#new</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='edit_session'>
+      edit_session<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/sessions/:id/edit(.:format)'>
+    /sessions/:id/edit(.:format)
+  </td>
+  <td>
+    <p>sessions#edit</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='session'>
+      session<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/sessions/:id(.:format)'>
+    /sessions/:id(.:format)
+  </td>
+  <td>
+    <p>sessions#show</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PATCH
+  </td>
+  <td data-route-path='/sessions/:id(.:format)'>
+    /sessions/:id(.:format)
+  </td>
+  <td>
+    <p>sessions#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PUT
+  </td>
+  <td data-route-path='/sessions/:id(.:format)'>
+    /sessions/:id(.:format)
+  </td>
+  <td>
+    <p>sessions#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    DELETE
+  </td>
+  <td data-route-path='/sessions/:id(.:format)'>
+    /sessions/:id(.:format)
+  </td>
+  <td>
+    <p>sessions#destroy</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='logout'>
+      logout<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/logout(.:format)'>
+    /logout(.:format)
+  </td>
+  <td>
+    <p>sessions#destroy</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='root'>
+      root<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/'>
+    /
+  </td>
+  <td>
+    <p>questions#index</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='api_v1_answers'>
+      api_v1_answers<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/questions/:id/answers(.:format)'>
+    /api/v1/questions/:id/answers(.:format)
+  </td>
+  <td>
+    <p>api/v1/answers#index</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path='/api/v1/questions/:id/answers(.:format)'>
+    /api/v1/questions/:id/answers(.:format)
+  </td>
+  <td>
+    <p>api/v1/answers#create</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='new_api_v1_answer'>
+      new_api_v1_answer<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/questions/:id/answers/new(.:format)'>
+    /api/v1/questions/:id/answers/new(.:format)
+  </td>
+  <td>
+    <p>api/v1/answers#new</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='edit_api_v1_answer'>
+      edit_api_v1_answer<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/questions/:id/answers/:id/edit(.:format)'>
+    /api/v1/questions/:id/answers/:id/edit(.:format)
+  </td>
+  <td>
+    <p>api/v1/answers#edit</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='api_v1_answer'>
+      api_v1_answer<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/questions/:id/answers/:id(.:format)'>
+    /api/v1/questions/:id/answers/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/answers#show</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PATCH
+  </td>
+  <td data-route-path='/api/v1/questions/:id/answers/:id(.:format)'>
+    /api/v1/questions/:id/answers/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/answers#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PUT
+  </td>
+  <td data-route-path='/api/v1/questions/:id/answers/:id(.:format)'>
+    /api/v1/questions/:id/answers/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/answers#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    DELETE
+  </td>
+  <td data-route-path='/api/v1/questions/:id/answers/:id(.:format)'>
+    /api/v1/questions/:id/answers/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/answers#destroy</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='api_v1_questions'>
+      api_v1_questions<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/questions(.:format)'>
+    /api/v1/questions(.:format)
+  </td>
+  <td>
+    <p>api/v1/questions#index</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path='/api/v1/questions(.:format)'>
+    /api/v1/questions(.:format)
+  </td>
+  <td>
+    <p>api/v1/questions#create</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='new_api_v1_question'>
+      new_api_v1_question<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/questions/new(.:format)'>
+    /api/v1/questions/new(.:format)
+  </td>
+  <td>
+    <p>api/v1/questions#new</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='edit_api_v1_question'>
+      edit_api_v1_question<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/questions/:id/edit(.:format)'>
+    /api/v1/questions/:id/edit(.:format)
+  </td>
+  <td>
+    <p>api/v1/questions#edit</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='api_v1_question'>
+      api_v1_question<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/questions/:id(.:format)'>
+    /api/v1/questions/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/questions#show</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PATCH
+  </td>
+  <td data-route-path='/api/v1/questions/:id(.:format)'>
+    /api/v1/questions/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/questions#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PUT
+  </td>
+  <td data-route-path='/api/v1/questions/:id(.:format)'>
+    /api/v1/questions/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/questions#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    DELETE
+  </td>
+  <td data-route-path='/api/v1/questions/:id(.:format)'>
+    /api/v1/questions/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/questions#destroy</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='api_v1_users'>
+      api_v1_users<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/users(.:format)'>
+    /api/v1/users(.:format)
+  </td>
+  <td>
+    <p>api/v1/users#index</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path='/api/v1/users(.:format)'>
+    /api/v1/users(.:format)
+  </td>
+  <td>
+    <p>api/v1/users#create</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='new_api_v1_user'>
+      new_api_v1_user<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/users/new(.:format)'>
+    /api/v1/users/new(.:format)
+  </td>
+  <td>
+    <p>api/v1/users#new</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='edit_api_v1_user'>
+      edit_api_v1_user<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/users/:id/edit(.:format)'>
+    /api/v1/users/:id/edit(.:format)
+  </td>
+  <td>
+    <p>api/v1/users#edit</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='api_v1_user'>
+      api_v1_user<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/users/:id(.:format)'>
+    /api/v1/users/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/users#show</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PATCH
+  </td>
+  <td data-route-path='/api/v1/users/:id(.:format)'>
+    /api/v1/users/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/users#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PUT
+  </td>
+  <td data-route-path='/api/v1/users/:id(.:format)'>
+    /api/v1/users/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/users#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    DELETE
+  </td>
+  <td data-route-path='/api/v1/users/:id(.:format)'>
+    /api/v1/users/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/users#destroy</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='api_v1_sessions'>
+      api_v1_sessions<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/sessions(.:format)'>
+    /api/v1/sessions(.:format)
+  </td>
+  <td>
+    <p>api/v1/sessions#index</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path='/api/v1/sessions(.:format)'>
+    /api/v1/sessions(.:format)
+  </td>
+  <td>
+    <p>api/v1/sessions#create</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='new_api_v1_session'>
+      new_api_v1_session<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/sessions/new(.:format)'>
+    /api/v1/sessions/new(.:format)
+  </td>
+  <td>
+    <p>api/v1/sessions#new</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='edit_api_v1_session'>
+      edit_api_v1_session<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/sessions/:id/edit(.:format)'>
+    /api/v1/sessions/:id/edit(.:format)
+  </td>
+  <td>
+    <p>api/v1/sessions#edit</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='api_v1_session'>
+      api_v1_session<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/sessions/:id(.:format)'>
+    /api/v1/sessions/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/sessions#show</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PATCH
+  </td>
+  <td data-route-path='/api/v1/sessions/:id(.:format)'>
+    /api/v1/sessions/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/sessions#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    PUT
+  </td>
+  <td data-route-path='/api/v1/sessions/:id(.:format)'>
+    /api/v1/sessions/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/sessions#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name=''>
+  </td>
+  <td>
+    DELETE
+  </td>
+  <td data-route-path='/api/v1/sessions/:id(.:format)'>
+    /api/v1/sessions/:id(.:format)
+  </td>
+  <td>
+    <p>api/v1/sessions#destroy</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='api_v1_logout'>
+      api_v1_logout<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/api/v1/logout(.:format)'>
+    /api/v1/logout(.:format)
+  </td>
+  <td>
+    <p>api/v1/sessions#destroy</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='rails_service_blob'>
+      rails_service_blob<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/rails/active_storage/blobs/:signed_id/*filename(.:format)'>
+    /rails/active_storage/blobs/:signed_id/*filename(.:format)
+  </td>
+  <td>
+    <p>active_storage/blobs#show</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='rails_blob_representation'>
+      rails_blob_representation<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format)'>
+    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format)
+  </td>
+  <td>
+    <p>active_storage/representations#show</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='rails_disk_service'>
+      rails_disk_service<span class='helper'>_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path='/rails/active_storage/disk/:encoded_key/*filename(.:format)'>
+    /rails/active_storage/disk/:encoded_key/*filename(.:format)
+  </td>
+  <td>
+    <p>active_storage/disk#show</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='update_rails_disk_service'>
+      update_rails_disk_service<span class='helper'>_path</span>
+  </td>
+  <td>
+    PUT
+  </td>
+  <td data-route-path='/rails/active_storage/disk/:encoded_token(.:format)'>
+    /rails/active_storage/disk/:encoded_token(.:format)
+  </td>
+  <td>
+    <p>active_storage/disk#update</p>
+  </td>
+</tr>
+<tr class='route_row' data-helper='path'>
+  <td data-route-name='rails_direct_uploads'>
+      rails_direct_uploads<span class='helper'>_path</span>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path='/rails/active_storage/direct_uploads(.:format)'>
+    /rails/active_storage/direct_uploads(.:format)
+  </td>
+  <td>
+    <p>active_storage/direct_uploads#create</p>
+  </td>
+</tr>
+
+  </tbody>
+</table>
+
+<script type='text/javascript'>
+  // support forEarch iterator on NodeList
+  NodeList.prototype.forEach = Array.prototype.forEach;
+
+  // Enables path search functionality
+  function setupMatchPaths() {
+    // Check if there are any matched results in a section
+    function checkNoMatch(section, noMatchText) {
+      if (section.children.length <= 1) {
+        section.innerHTML += noMatchText;
+      }
+    }
+
+    // get JSON from URL and invoke callback with result
+    function getJSON(url, success) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url);
+      xhr.onload = function() {
+        if (this.status == 200)
+          success(JSON.parse(this.response));
+      };
+      xhr.send();
+    }
+
+    function delayedKeyup(input, callback) {
+      var timeout;
+      input.onkeyup = function(){
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(callback, 300);
+      }
+    }
+
+    // remove params or fragments
+    function sanitizePath(path) {
+      return path.replace(/[#?].*/, '');
+    }
+
+    var pathElements = document.querySelectorAll('#route_table [data-route-path]'),
+        searchElem   = document.querySelector('#search'),
+        exactSection = document.querySelector('#exact_matches'),
+        fuzzySection = document.querySelector('#fuzzy_matches');
+
+    // Remove matches when no search value is present
+    searchElem.onblur = function(e) {
+      if (searchElem.value === "") {
+        exactSection.innerHTML = "";
+        fuzzySection.innerHTML = "";
+      }
+    }
+
+    // On key press perform a search for matching paths
+    delayedKeyup(searchElem, function() {
+      var path = sanitizePath(searchElem.value),
+          defaultExactMatch = '<tr><th colspan="4">Paths Matching (' + path +'):</th></tr>',
+          defaultFuzzyMatch = '<tr><th colspan="4">Paths Containing (' + path +'):</th></tr>',
+          noExactMatch      = '<tr><th colspan="4">No Exact Matches Found</th></tr>',
+          noFuzzyMatch      = '<tr><th colspan="4">No Fuzzy Matches Found</th></tr>';
+
+      if (!path)
+        return searchElem.onblur();
+
+      getJSON('/rails/info/routes?path=' + path, function(matches){
+        // Clear out results section
+        exactSection.innerHTML = defaultExactMatch;
+        fuzzySection.innerHTML = defaultFuzzyMatch;
+
+        // Display exact matches and fuzzy matches
+        pathElements.forEach(function(elem) {
+          var elemPath = elem.getAttribute('data-route-path');
+
+          if (matches['exact'].indexOf(elemPath) != -1)
+            exactSection.appendChild(elem.parentNode.cloneNode(true));
+
+          if (matches['fuzzy'].indexOf(elemPath) != -1)
+            fuzzySection.appendChild(elem.parentNode.cloneNode(true));
+        })
+
+        // Display 'No Matches' message when no matches are found
+        checkNoMatch(exactSection, noExactMatch);
+        checkNoMatch(fuzzySection, noFuzzyMatch);
+      })
+    })
+  }
+
+  // Enables functionality to toggle between `_path` and `_url` helper suffixes
+  function setupRouteToggleHelperLinks() {
+
+    // Sets content for each element
+    function setValOn(elems, val) {
+      elems.forEach(function(elem) {
+        elem.innerHTML = val;
+      });
+    }
+
+    // Sets onClick event for each element
+    function onClick(elems, func) {
+      elems.forEach(function(elem) {
+        elem.onclick = func;
+      });
+    }
+
+    var toggleLinks = document.querySelectorAll('#route_table [data-route-helper]');
+
+    onClick(toggleLinks, function(){
+      var helperTxt   = this.getAttribute("data-route-helper"),
+          helperElems = document.querySelectorAll('[data-route-name] span.helper');
+
+      setValOn(helperElems, helperTxt);
+    });
+  }
+
+  setupMatchPaths();
+  setupRouteToggleHelperLinks();
+</script>
+
+
+
+</body>
+</html>
