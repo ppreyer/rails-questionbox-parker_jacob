@@ -12,6 +12,7 @@
    json.answerUsername @answer_username
    json.answerCreated answer.created_at
    json.answerUpdated answer.updated_at
+   json.answerTitle answer.title
    json.answerContent answer.content
    json.verify answer.verify_answer
    json.answerUserID answer.user_id
