@@ -6,5 +6,5 @@
    json.updated_at question.updated_at
    json.title question.title
    json.content question.content
-   json.image question.image.name
-   end
+   json.image_url question.image_url
+  end
