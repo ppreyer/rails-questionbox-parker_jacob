@@ -52,7 +52,7 @@ class Api::V1::AnswersController < ApplicationController
     @answer = Answer.find(params[:id])
     respond_to do |format|
       if @answer.update(answer_params)
-        format.json { render :show, status: :ok, location: @answer }
+        format.json { render json: @answer, status: :ok, location: @answer }
       else
         format.json { render json: @answer.errors, status: :unprocessable_entity }
       end
