@@ -74,7 +74,7 @@ class AnswersController < ApplicationController
   private
 
     def answer_params
-      params.require(:answer).permit(:content, :user_id, :question_id, :image_url)
+      params.require(:answer).permit(:content, :user_id, :question_id, :image_url, :title)
     end
 
     def send_answer_email(user)
