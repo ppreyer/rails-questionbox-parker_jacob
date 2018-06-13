@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+      /* Email styles need to be inline */
+    </style>
+  </head>
+
+  <body>
+  <h1>Hello <%= @user.username %></h1>
+  <h1>You have posted <%= @question %> questions and responded with <%= @answer %> answers this week</h1>
+  <h2>Your Questions</h2>
+  <ul>
+    <% @question_list.each do |question| %>
+      <li><%= question.title %>
+        <p><%= question.content %></p>
+      </li>
+    <% end %>
+  </ul>
+  <h2>Your Answers</h2>
+  <ul>
+    <% @answer_list.each do |answer| %>
+      <li><%= answer.content %></li>
+    <% end %>
+  </ul>
+    <%= yield %>
+  </body>
+</html>
