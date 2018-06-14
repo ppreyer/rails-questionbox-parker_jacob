@@ -10,20 +10,24 @@
   <body>
   <h1>Hello <%= @user.username %></h1>
   <h1>You have posted <%= @question %> questions and responded with <%= @answer %> answers this week</h1>
-  <h2>Your Questions</h2>
-  <ul>
-    <% @question_list.each do |question| %>
-      <li><%= question.title %>
-        <p><%= question.content %></p>
-      </li>
-    <% end %>
-  </ul>
-  <h2>Your Answers</h2>
-  <ul>
-    <% @answer_list.each do |answer| %>
-      <li><%= answer.content %></li>
-    <% end %>
-  </ul>
+  <% if @question == 0 %>
+    <h1>You did not post any questions this week. Hope you post something soon! </h1>
+  <% else %>
+    <h2>Your Questions</h2>
+    <ul>
+      <% @question_list.each do |question| %>
+        <li><%= question.title %>
+          <p><%= question.content %></p>
+        </li>
+      <% end %>
+    </ul>
+    <h2>Your Answers</h2>
+    <ul>
+      <% @answer_list.each do |answer| %>
+        <li><%= answer.content %></li>
+      <% end %>
+    </ul>
+  <% end %>
     <%= yield %>
   </body>
 </html>
