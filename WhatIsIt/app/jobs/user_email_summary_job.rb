@@ -1,10 +1,11 @@
 class UserEmailSummaryJob < ApplicationJob
   queue_as :default
 
-  def perform(user_id)
-    user = User.find(user_id)
+  def perform
+    users = User.all
     
-
-    UserMailer.summary(user).deliver_now 
+    users.each do |user|
+      UserMailer.summary(user).deliver_now 
+    end
   end
 end
